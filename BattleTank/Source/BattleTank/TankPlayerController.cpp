@@ -9,14 +9,14 @@ void ATankPlayerController::BeginPlay()
 	auto ControlledTank = GetControlledTank();
 	if (!ControlledTank)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT, "Player Controller not possing tank")
+		UE_LOG(LogTemp, Warning, TEXT("Player Controller not possing tank"))
 	}
 	else
 	{
-		//UE_LOG(LogTemp, Warning, TEXT, "Player Controller possing: %s", *(ControlledTank->GetName()))
+		UE_LOG(LogTemp, Warning, TEXT("Player Controller possing: %s"), *ControlledTank->GetName())
 	}
 
-	//UE_LOG(LogTemp,Warning,TEXT,"Player Controller, Begin Play")
+	UE_LOG(LogTemp,Warning,TEXT("Player Controller, Begin Play"))
 }
 
 ATank* ATankPlayerController::GetControlledTank() const
