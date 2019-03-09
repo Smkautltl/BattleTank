@@ -17,7 +17,9 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	
 public:	
 	void BeginPlay() override;
+	void Tick(float DeltaSeconds) override;
 
 private:
 	ATank* GetControlledTank() const;
+	void AimTowardsCrosshair();
 };
