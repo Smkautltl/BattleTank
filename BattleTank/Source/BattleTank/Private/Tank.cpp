@@ -26,6 +26,11 @@ void ATank::Tick(float DeltaTime)
 
 }
 
+void ATank::SetBarrelRefrence(UStaticMeshComponent * BarrelToSet)
+{
+	TankAimingComponent->SetBarrelRefrence(BarrelToSet);
+}
+
 void ATank::AimAt(FVector HitLocation)
 {
 	TankAimingComponent->AimAt(HitLocation);
