@@ -2,6 +2,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -9,7 +10,7 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
@@ -40,12 +41,18 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		auto TankName = GetOwner()->GetName();
 		UE_LOG(LogTemp, Warning, TEXT("%s Aiming solution found"), *TankName)
 		MoveBarrelTowards(AimDirection);
+		MoveTurretTowards(AimDirection);
 	}	
 }
 
 void UTankAimingComponent::SetBarrelRefrence(UTankBarrel * BarrelToSet)
 {
 	Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::SetTurretRefrence(UTankTurret * TurretToSet)
+{
+	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
@@ -61,4 +68,13 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 
 	Barrel->Elevate(DeltaRotation.Pitch);
 
+}
+
+void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
+{
+	auto TurretRotation = Turret->GetForwardVector().Rotation();
+	auto AimAsRotation = AimDirection.Rotation();
+	auto DeltaRotation = AimAsRotation - TurretRotation;
+
+	Turret->Rotate(DeltaRotation.Yaw);
 }
