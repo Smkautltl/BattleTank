@@ -17,13 +17,12 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 	void AimAt(FVector WorldSpaceAim, float LaunchSpeed);
-	void SetBarrelRefrence(UTankBarrel* BarrelToSet);
-	void SetTurretRefrence(UTankTurret* TurretToSet);
+	void SetBarrelReference(UTankBarrel* BarrelToSet);
+	void SetTurretReference(UTankTurret* TurretToSet);
 
 private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 	void MoveBarrelTowards(FVector AimDirection);
 	void MoveTurretTowards(FVector AimDirection);
-	
 };
