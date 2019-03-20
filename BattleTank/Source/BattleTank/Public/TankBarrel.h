@@ -6,7 +6,7 @@
 #include "TankBarrel.generated.h"
 
 /**
- * 
+ * Tank Barrel is use to get the end of the barrel in the correct position
  */
 UCLASS(meta = (BlueprintSpawnableComponent), hidecategories = ("Collision"))
 class BATTLETANK_API UTankBarrel : public UStaticMeshComponent

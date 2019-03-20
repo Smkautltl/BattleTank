@@ -5,6 +5,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "TankTurret.generated.h"
 
+/**
+* Tank Turret is used to rotate the turret to the correct position 
+*/
 UCLASS(meta = (BlueprintSpawnableComponent), hidecategories = ("Collision"))
 class BATTLETANK_API UTankTurret : public UStaticMeshComponent
 {
