@@ -4,7 +4,7 @@
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "TankAimingComponent.h"
-
+#include "Engine/World.h"
 
 // Sets default values
 ATank::ATank()
@@ -13,34 +13,41 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
-
+	
 }
 
+//Sets the barrel that the c++ code can manipulate
 void ATank::SetBarrelRefrence(UTankBarrel * BarrelToSet)
 {
 	if (!BarrelToSet) {return;}
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
 	Barrel = BarrelToSet;
 }
-
+//Set the turret that the C++ code can manipulate
 void ATank::SetTurretRefrence(UTankTurret * TurretToSet)
 {
 	if (!TurretToSet) { return; }
 	TankAimingComponent->SetTurretReference(TurretToSet);
 }
 
+//Creates a projectile as the position that the barrel is currently in
 void ATank::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Fire pressed"))
+	bool isReloaded = FPlatformTime::Seconds() - LastFireTime > ReloadTimeInSecs;
 
-	if (!Barrel) { return; }
+	if (Barrel && isReloaded) {
 
-	GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, 
-										Barrel->GetSocketLocation("Projectile"), 
-										Barrel->GetSocketRotation("Projectile")
-									   );
+		auto projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
+			Barrel->GetSocketLocation("Projectile"),
+			Barrel->GetSocketRotation("Projectile")
+			);
+		projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+
+	}
 }
 
+//Sends the HitLocation to TankAimingComponent to get manipulated 
 void ATank::AimAt(FVector HitLocation)
 {
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);

@@ -1,5 +1,6 @@
 // Copyright - Matthew Pye 2019
 #include "TankTurret.h"
+#include "Engine/World.h"
 
 void UTankTurret::Rotate(float RelativeSpeed)
 {

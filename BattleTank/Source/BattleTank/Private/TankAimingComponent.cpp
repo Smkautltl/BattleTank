@@ -15,6 +15,7 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
+//Calculates a possible projectile velocity
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
 	if (!Barrel) { return; }
