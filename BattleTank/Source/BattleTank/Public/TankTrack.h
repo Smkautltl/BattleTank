@@ -9,7 +9,7 @@
 /**
  * Tank Tank is used to set the maximum driving force
  */
-UCLASS(meta = (BlueprintSpawnableComponent), hidecategories = ("Collision"))
+UCLASS(meta = (BlueprintSpawnableComponent))//, hidecategories = ("Collision"))
 class BATTLETANK_API UTankTrack : public UStaticMeshComponent
 {
 	GENERATED_BODY()
@@ -17,6 +17,8 @@ class BATTLETANK_API UTankTrack : public UStaticMeshComponent
 public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	void SetThrottle(float Throttle);
-	
-	
+
+	//Max force per track in newtons
+	UPROPERTY(EditDefaultsOnly)
+		float MaxDrivingForce = 400000;
 };
