@@ -4,6 +4,7 @@
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 #include "Engine/World.h"
 
 // Sets default values
@@ -13,7 +14,7 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
-	
+
 }
 
 //Sets the barrel that the c++ code can manipulate
@@ -34,6 +35,12 @@ void ATank::SetTurretRefrence(UTankTurret * TurretToSet)
 void ATank::Fire()
 {
 	bool isReloaded = FPlatformTime::Seconds() - LastFireTime > ReloadTimeInSecs;
+
+	if (!ProjectileBlueprint)
+	{
+		UE_LOG(LogTemp, Error, TEXT("No Projectile Blueprint added to tank blueprint!"))
+		return;
+	}
 
 	if (Barrel && isReloaded) {
 
@@ -57,5 +64,5 @@ void ATank::AimAt(FVector HitLocation)
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	
 }
