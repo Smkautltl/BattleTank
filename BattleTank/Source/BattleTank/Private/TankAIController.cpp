@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright - Matthew Pye 2019
 
 #include "TankAIController.h"
 #include "Engine/World.h"

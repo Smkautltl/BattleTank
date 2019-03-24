@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright - Matthew Pye 2019
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
@@ -45,17 +45,24 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	}	
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel * BarrelToSet)
+void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
+	if (!BarrelToSet || !TurretToSet) { return; }
+
 	Barrel = BarrelToSet;
-}
-void UTankAimingComponent::SetTurretReference(UTankTurret * TurretToSet)
-{
 	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
+
+	if (!Barrel)
+	{
+		UE_LOG(LogTemp, Error, TEXT("No barrel refrence set unable to move barrel"))
+		return;
+	}
+	
+
 	//Convert location that the barrel need to move into a rotator
 	//Use rotator to move the barrel to the correct location
 	//Also, move the head where the barrel is attached to so that it can get into the correct position
@@ -69,6 +76,12 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 }
 void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 {
+	if (!Turret)
+	{
+		UE_LOG(LogTemp, Error, TEXT("No turret refrence set unable to move turret"))
+		return;
+	}
+
 	auto TurretRotation = Turret->GetForwardVector().Rotation();
 	auto AimAsRotation = AimDirection.Rotation();
 	auto DeltaRotation = AimAsRotation - TurretRotation;

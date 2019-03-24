@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright - Matthew Pye 2019
 
 #pragma once
 
@@ -17,8 +17,12 @@ public:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
 
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+		ATank* GetControlledTank() const;
+
 private:
-	ATank* GetControlledTank() const;
+
 	void AimTowardsCrosshair();
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 
