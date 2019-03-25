@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "TankBarrel.h"
 #include "Tank.generated.h"
 
 class UTankAimingComponent;
@@ -43,6 +44,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 		TSubclassOf<AProjectile> ProjectileBlueprint;
+
+	UTankBarrel* Barrel = nullptr;
 	
 	double LastFireTime = 0;
 	

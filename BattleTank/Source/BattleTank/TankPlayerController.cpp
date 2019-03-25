@@ -1,23 +1,24 @@
 // Copyright - Matthew Pye 2019
 
 #include "TankPlayerController.h"
+#include "TankAimingComponent.h"
+#include "BattleTank.h"
 #include "Tank.h"
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	auto ControlledTank = GetControlledTank();
-	if (!ControlledTank)
+	auto AimingComponent = GetControlledTank()->FindComponentByClass<UTankAimingComponent>();
+	if (AimingComponent)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Controller not possing tank"))
+		FoundTankAimingComponent(AimingComponent);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Controller possing: %s"), *ControlledTank->GetName())
+		UE_LOG(LogTemp, Warning, TEXT("Player controller can't find aiming component at begin play"))
 	}
 
-	UE_LOG(LogTemp,Warning,TEXT("Player Controller, Begin Play"))
+
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
