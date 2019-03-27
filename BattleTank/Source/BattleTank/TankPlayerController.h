@@ -19,13 +19,13 @@ public:
 	void Tick(float DeltaSeconds) override;
 
 protected:
+	UTankAimingComponent* TankAimingComponent = nullptr;
+
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 		ATank* GetControlledTank() const;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 		void FoundTankAimingComponent(UTankAimingComponent* AimCompRef);
-
-		UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
 
@@ -43,6 +43,4 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		float LineTraceRange = 1000000;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float LaunchSpeed = 4000;
 };
