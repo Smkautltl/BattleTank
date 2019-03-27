@@ -16,9 +16,9 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 //Calculates a possible projectile velocity
-void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
+void UTankAimingComponent::AimAt(FVector HitLocation)
 {
-	if (!Barrel) { return; }
+	if (!ensure(Barrel)) { return; }
 
 	FVector OutLaunchVelocity(0);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -39,7 +39,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	if  (HaveAimSolution)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		auto TankName = GetOwner()->GetName();
 		MoveBarrelTowards(AimDirection);
 		MoveTurretTowards(AimDirection);
 	}	
@@ -47,7 +46,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
 {
-	if (!BarrelToSet || !TurretToSet) { return; }
+	if (!ensure(BarrelToSet && TurretToSet)) { return; }
 
 	Barrel = BarrelToSet;
 	Turret = TurretToSet;
@@ -56,7 +55,7 @@ void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * T
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
 
-	if (!Barrel)
+	if (!ensure(Barrel))
 	{
 		UE_LOG(LogTemp, Error, TEXT("No barrel refrence set unable to move barrel"))
 		return;
@@ -76,13 +75,13 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 }
 void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 {
-	if (!Turret)
+	if (!ensure(Turret))
 	{
 		UE_LOG(LogTemp, Error, TEXT("No turret refrence set unable to move turret"))
 		return;
 	}
 
-	auto TurretRotation = Turret->GetForwardVector().Rotation();
+	auto TurretRotation = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotation = AimDirection.Rotation();
 	auto DeltaRotation = AimAsRotation - TurretRotation;
 

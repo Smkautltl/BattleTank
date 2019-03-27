@@ -24,6 +24,9 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 		void FoundTankAimingComponent(UTankAimingComponent* AimCompRef);
+
+		UTankAimingComponent* TankAimingComponent = nullptr;
+
 private:
 
 	void AimTowardsCrosshair();
@@ -39,4 +42,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 		float LineTraceRange = 1000000;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		float LaunchSpeed = 4000;
 };

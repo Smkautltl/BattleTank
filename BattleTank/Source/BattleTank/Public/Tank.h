@@ -8,7 +8,6 @@
 
 class UTankAimingComponent;
 class AProjectile;
-class UTankMovementComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -20,15 +19,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 		void Fire();
 
-	void AimAt(FVector HitLocation);
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		float ReloadTimeInSecs = 3;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+		TSubclassOf<AProjectile> ProjectileBlueprint;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		UTankAimingComponent* TankAimingComponent = nullptr;
-
-	UPROPERTY(BlueprintReadOnly)
-		UTankMovementComponent* TankMovementComponent = nullptr;
 
 private:	
 	// Sets default values for this pawn's properties
@@ -37,14 +36,10 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//TODO remove when fire is moved over to the aiming component
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float LaunchSpeed = 4000; 
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float ReloadTimeInSecs = 3;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-		TSubclassOf<AProjectile> ProjectileBlueprint;
-
+	
 	UTankBarrel* Barrel = nullptr;
 	
 	double LastFireTime = 0;

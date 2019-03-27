@@ -3,7 +3,6 @@
 #include "Tank.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
-#include "TankAimingComponent.h"
 #include "TankMovementComponent.h"
 #include "Engine/World.h"
 
@@ -20,13 +19,13 @@ void ATank::Fire()
 {
 	bool isReloaded = FPlatformTime::Seconds() - LastFireTime > ReloadTimeInSecs;
 
-	if (!ProjectileBlueprint)
+	if (!ensure(ProjectileBlueprint))
 	{
 		UE_LOG(LogTemp, Error, TEXT("No Projectile Blueprint added to tank blueprint!"))
 		return;
 	}
 
-	if (Barrel && isReloaded) {
+	if (ensure(Barrel && isReloaded)) {
 
 		auto projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
 															  Barrel->GetSocketLocation("Projectile"),
@@ -36,13 +35,8 @@ void ATank::Fire()
 		LastFireTime = FPlatformTime::Seconds();
 
 	}
-}
 
-//Sends the HitLocation to TankAimingComponent to get manipulated 
-void ATank::AimAt(FVector HitLocation)
-{
-	if (!TankAimingComponent) { return; }
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+	
 }
 
 // Called to bind functionality to input

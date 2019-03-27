@@ -7,6 +7,7 @@
 #include "TankAIController.generated.h"
 
 class ATank;
+class UTankAimingComponent;
 
 /**
  * 
@@ -20,8 +21,14 @@ public:
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
 
+protected:
+	UTankAimingComponent* TankAimingComponent = nullptr;
+
 private:
 
 	//How close the AI tank can get to the player
 	float AcceptanceRadius = 3000;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		float LaunchSpeed = 4000;
 };
