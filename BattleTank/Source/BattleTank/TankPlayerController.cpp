@@ -57,10 +57,10 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 	if(GetLookDirection(ScreenLocation, WorldDirection))
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("World Direction: %s"), *WorldDirection.ToString())
-		GetLookVectorHitLocation(WorldDirection, HitLocation);
+		return GetLookVectorHitLocation(WorldDirection, HitLocation);
 	}
 
-	return true;
+	return false;
 }
 
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
