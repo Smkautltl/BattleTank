@@ -41,11 +41,13 @@ public:
 		float ReloadTimeInSecs = 3;
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		TSubclassOf<AProjectile> ProjectileBlueprint;
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+		int32 NumberOfRounds = 3;
 
 	EFiringStatus GetFiringState() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
-	int GetRoundsLeft() const;
+	int32 GetRoundsLeft() const;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
@@ -67,5 +69,5 @@ private:
 
 	FVector AimDirection = FVector(0);
 
-	int NumberOfRounds = 3;
+	
 };
