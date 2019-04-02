@@ -10,7 +10,8 @@ enum class EFiringStatus : uint8
 {
 	Locked,
 	Aiming,
-	Reloading
+	Reloading,
+	OutOfAmmo
 };
 
 class UTankBarrel;
@@ -41,6 +42,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
+	EFiringStatus GetFiringState() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+	int GetRoundsLeft() const;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 		EFiringStatus FiringStatus = EFiringStatus::Reloading;
@@ -60,4 +66,6 @@ private:
 	bool isBarrelMoving();
 
 	FVector AimDirection = FVector(0);
+
+	int NumberOfRounds = 3;
 };

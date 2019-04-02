@@ -17,7 +17,7 @@ void UTankTrack::BeginPlay()
 
 void UTankTrack::ApplySidewaysForce()
 {
-	auto SlippageSpeed = FVector::DotProduct(GetComponentVelocity(), GetRightVector());
+	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
 	auto DeltaTime = GetWorld()->GetDeltaSeconds();
 	auto CorrectingAcceleration = -SlippageSpeed / DeltaTime * GetRightVector();
 

@@ -16,12 +16,40 @@ UTankAimingComponent::UTankAimingComponent()
 
 	// ...
 }
-
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
 	LastFireTime = FPlatformTime::Seconds();
+}
+void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
+{
+	if (!ensure(BarrelToSet && TurretToSet)) { return; }
+
+	Barrel = BarrelToSet;
+	Turret = TurretToSet;
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	if (NumberOfRounds <= 0)
+	{	
+		FiringStatus = EFiringStatus::OutOfAmmo;
+	}
+	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSecs)
+	{
+		FiringStatus = EFiringStatus::Reloading;
+	}
+	else if (isBarrelMoving())
+	{
+		FiringStatus = EFiringStatus::Aiming;
+	}
+	else
+	{
+		FiringStatus = EFiringStatus::Locked;
+	}
+
+	//TODO handle aiming and locked states
 }
 
 //Calculates a possible projectile velocity
@@ -34,48 +62,50 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 
 	//Calculates the launch velocity
 	bool HaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
-																		this,
-																		OutLaunchVelocity,
-																		StartLocation,
-																		HitLocation,
-																		LaunchSpeed,
-																		false,
-																		0,
-																		0,
-																		ESuggestProjVelocityTraceOption::DoNotTrace
-																	  );
+		this,
+		OutLaunchVelocity,
+		StartLocation,
+		HitLocation,
+		LaunchSpeed,
+		false,
+		0,
+		0,
+		ESuggestProjVelocityTraceOption::DoNotTrace
+	);
 
-	if  (HaveAimSolution)
+	if (HaveAimSolution)
 	{
 		AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 		MoveTurretTowards(AimDirection);
-	}	
+	}
 }
-
-void UTankAimingComponent::Initialise(UTankBarrel * BarrelToSet, UTankTurret * TurretToSet)
+EFiringStatus UTankAimingComponent::GetFiringState() const
 {
-	if (!ensure(BarrelToSet && TurretToSet)) { return; }
-
-	Barrel = BarrelToSet;
-	Turret = TurretToSet;
+	return FiringStatus;
 }
-
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+int UTankAimingComponent::GetRoundsLeft() const
 {
-	if((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSecs)
-	{	
-		FiringStatus = EFiringStatus::Reloading;
-	}
-	else if (isBarrelMoving())
+	return NumberOfRounds;
+}
+void UTankAimingComponent::Fire()
+{
+	if (!ensure(ProjectileBlueprint))
 	{
-		FiringStatus = EFiringStatus::Aiming;
+		UE_LOG(LogTemp, Error, TEXT("No Projectile Blueprint added to tank blueprint!"))
+			return;
 	}
-	else
-	{
-		FiringStatus = EFiringStatus::Locked;
+	if (!ensure(Barrel)) { return; }
+
+	if (FiringStatus == EFiringStatus::Aiming || FiringStatus == EFiringStatus::Locked) {
+		auto projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
+			Barrel->GetSocketLocation("Projectile"),
+			Barrel->GetSocketRotation("Projectile")
+			);
+		projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+		NumberOfRounds --;
 	}
-	//TODO handle aiming and locked states
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
@@ -122,26 +152,6 @@ void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
 	auto DeltaRotation = AimAsRotation - TurretRotation;
 	
 }
-
-void UTankAimingComponent::Fire()
-{
-	if (!ensure(ProjectileBlueprint))
-	{
-		UE_LOG(LogTemp, Error, TEXT("No Projectile Blueprint added to tank blueprint!"))
-			return;
-	}
-	if (!ensure(Barrel)) {return;}
-		
-	if (FiringStatus != EFiringStatus::Reloading) {
-		auto projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint,
-			Barrel->GetSocketLocation("Projectile"),
-			Barrel->GetSocketRotation("Projectile")
-			);
-		projectile->LaunchProjectile(LaunchSpeed);
-		LastFireTime = FPlatformTime::Seconds();
-	}
-}
-
 bool UTankAimingComponent::isBarrelMoving()
 {
 	if (!ensure(Barrel)) { return false; }

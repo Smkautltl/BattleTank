@@ -24,11 +24,12 @@ public:
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
+	//How close the AI tank can get to the player
+	UPROPERTY(EditAnywhere, Category = "Firing")
+		float AcceptanceRadius = 80000;
+
 private:
 
-	//How close the AI tank can get to the player
-	float AcceptanceRadius = 3000;
+	
 
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
-		float LaunchSpeed = 4000;
 };
