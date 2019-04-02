@@ -129,11 +129,12 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	
 	Barrel->Elevate(DeltaRotation.Pitch);
 
-	if (FMath::Abs(DeltaRotation.Yaw))
+	//Goes the shortest way around
+	if (FMath::Abs(DeltaRotation.Yaw) < 180)
 	{
 		Turret->Rotate(DeltaRotation.Yaw);
 	}
-	else
+	else //Avoid going the long way around
 	{
 		Turret->Rotate(-DeltaRotation.Yaw);
 	}

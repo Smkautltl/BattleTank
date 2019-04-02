@@ -9,7 +9,7 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto ControlledTank = Cast<ATank>(GetPawn());
+	auto ControlledTank = GetPawn();
 	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
 	if (ensure(AimingComponent))
 	{
