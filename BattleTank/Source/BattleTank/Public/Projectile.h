@@ -21,6 +21,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	void LaunchProjectile(float Speed);
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,5 +36,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		UParticleSystemComponent* ImpactBlast = nullptr;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
+		FVector NormalImpulse, const FHitResult& Hit);
 		
 };
