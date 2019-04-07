@@ -18,8 +18,7 @@ class BATTLETANK_API ATankAIController : public AAIController
 	GENERATED_BODY()
 	
 public:
-	void BeginPlay() override;
-	void Tick(float DeltaTime) override;
+	
 
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
@@ -29,7 +28,12 @@ protected:
 		float AcceptanceRadius = 80000;
 
 private:
+	void BeginPlay() override;
+	void Tick(float DeltaTime) override;
 
-	
+	void SetPawn(APawn* InPawn) override;
+
+	UFUNCTION()
+		void OnTankDeath();
 
 };

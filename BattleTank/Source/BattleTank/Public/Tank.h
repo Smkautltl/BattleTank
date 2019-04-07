@@ -7,6 +7,8 @@
 
 class UTankAimingComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
+
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
@@ -17,6 +19,8 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Health")
 	float GetHealthPercent() const;
+	
+	FTankDelegate OnDeath;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -26,6 +30,8 @@ private:
 	// Sets default values for this pawn's properties
 	ATank();
 
+	void BeginPlay() override;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -33,7 +39,8 @@ private:
 		int32 StartingHealth = 100;
 
 	UPROPERTY(VisibleAnywhere, Category = "Health")
-		int32 CurrentHealth = StartingHealth;
+		int32 CurrentHealth;
 
+	
 	
 };

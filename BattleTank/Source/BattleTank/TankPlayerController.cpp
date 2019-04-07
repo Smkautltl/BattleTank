@@ -21,7 +21,6 @@ void ATankPlayerController::BeginPlay()
 
 
 }
-
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -44,7 +43,6 @@ void ATankPlayerController::AimTowardsCrosshair()
 		TankAimingComponent->AimAt(HitLocation);
 	}
 }
-
 bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 {
 	//Finds the position of the crosshair on the screen
@@ -62,13 +60,11 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 
 	return false;
 }
-
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
 {
 	FVector CameraWorldLocation;
 	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraWorldLocation, LookDirection);
 }
-
 bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const
 {
 	FHitResult HitResult;
@@ -84,4 +80,22 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 
 	HitLocation = FVector(0);
 	return false;
+}
+
+void ATankPlayerController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnTankDeath);
+	}
+}
+
+void ATankPlayerController::OnTankDeath()
+{
+	StartSpectatingOnly();
 }

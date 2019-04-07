@@ -17,6 +17,13 @@ ATank::ATank()
 
 }
 
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+
+	CurrentHealth = StartingHealth;
+}
+
 // Called to bind functionality to input
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -33,8 +40,8 @@ float ATank::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AC
 	CurrentHealth -= DamageToApply;
 
 	if (CurrentHealth <= 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Tank Dead"))
+	{		
+		OnDeath.Broadcast();
 	}
 
 	return DamageToApply;

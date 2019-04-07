@@ -18,6 +18,9 @@ public:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
 
+	UFUNCTION()
+	void OnTankDeath();
+
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
@@ -39,6 +42,9 @@ private:
 
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const;
+
+	void SetPawn(APawn* InPawn);
+	
 
 	UPROPERTY(EditDefaultsOnly)
 		float LineTraceRange = 1000000;
