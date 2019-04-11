@@ -9,6 +9,8 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (!GetPawn()) { return; }
+
 	auto ControlledTank = GetPawn();
 	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
 	if (ensure(AimingComponent))
@@ -23,17 +25,17 @@ void ATankAIController::BeginPlay()
 void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 
-	if (ensure(PlayerTank))
+	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+
+	if (PlayerTank)
 	{
-		MoveToActor(PlayerTank, AcceptanceRadius); //TODO Check radius  
-
+		MoveToActor(PlayerTank, AcceptanceRadius);
 		TankAimingComponent->AimAt(PlayerTank->GetActorLocation());
 
 		if(TankAimingComponent->GetFiringState() == EFiringStatus::Locked)
 		{
-			TankAimingComponent->Fire(); //TODO Limit Firing rate
+			TankAimingComponent->Fire(); 
 		}
 		
 	}
@@ -51,9 +53,12 @@ void ATankAIController::SetPawn(APawn* InPawn)
 		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnTankDeath);
 	}
 }
-
 void ATankAIController::OnTankDeath()
 {
 	GetPawn()->DetachFromControllerPendingDestroy();
 }
 
+void ATankAIController::SetClosestTank(ATank* Tank)
+{
+	ClosestTank = Tank;
+}

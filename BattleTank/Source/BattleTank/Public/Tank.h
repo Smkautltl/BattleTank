@@ -22,6 +22,9 @@ public:
 	
 	FTankDelegate OnDeath;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Tank")
+	FColor TeamColour;
+
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		UTankAimingComponent* TankAimingComponent = nullptr;

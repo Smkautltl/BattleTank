@@ -18,7 +18,9 @@ class BATTLETANK_API ATankAIController : public AAIController
 	GENERATED_BODY()
 	
 public:
-	
+
+	UFUNCTION(BlueprintCallable, Category = "Tank")
+	void SetClosestTank(ATank* Tank);
 
 protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
@@ -35,5 +37,7 @@ private:
 
 	UFUNCTION()
 		void OnTankDeath();
+
+	ATank* ClosestTank;
 
 };
